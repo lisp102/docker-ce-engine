@@ -63,7 +63,7 @@ checkout-scan-cli-plugin: src/github.com/docker/scan-cli-plugin
 	./scripts/checkout.sh src/github.com/docker/scan-cli-plugin "$(DOCKER_SCAN_REF)"
 
 .PHONY: checkout
-checkout: checkout-cli checkout-docker checkout-compose checkout-scan-cli-plugin ## checkout source at the given reference(s)
+checkout: checkout-docker
 
 .PHONY: clean
 clean: clean-src ## remove build artifacts

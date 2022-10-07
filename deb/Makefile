@@ -1,14 +1,11 @@
 include ../common.mk
 
 PLUGINS_DIR=$(realpath $(CURDIR)/../plugins)
-GITCOMMIT?=$(shell cd $(realpath $(CURDIR)/../src/github.com/docker/cli) && git rev-parse --short HEAD)
-CLI_GITCOMMIT?=$(shell cd $(realpath $(CURDIR)/../src/github.com/docker/cli) && git rev-parse --short HEAD)
 ENGINE_GITCOMMIT?=$(shell cd $(realpath $(CURDIR)/../src/github.com/docker/docker) && git rev-parse --short HEAD)
 GO_BASE_IMAGE=golang
 GO_IMAGE?=$(GO_BASE_IMAGE):$(GO_VERSION)-buster
-GEN_DEB_VER=$(shell ./gen-deb-ver $(realpath $(CURDIR)/../src/github.com/docker/cli) "$(VERSION)")
+GEN_DEB_VER=$(shell ./gen-deb-ver $(realpath $(CURDIR)/../src/github.com/docker/docker) "$(VERSION)")
 EPOCH?=5
-SCAN_GITCOMMIT?=$(shell cd $(realpath $(CURDIR)/../src/github.com/docker/scan-cli-plugin) && git rev-parse --short HEAD)
 
 ifdef BUILD_IMAGE
 	BUILD_IMAGE_FLAG=--build-arg $(BUILD_IMAGE)
@@ -31,11 +28,7 @@ RUN?=docker run --rm \
 	-e EPOCH='$(EPOCH)' \
 	-e DEB_VERSION=$(word 1, $(GEN_DEB_VER)) \
 	-e VERSION=$(word 2, $(GEN_DEB_VER)) \
-	-e CLI_GITCOMMIT=$(CLI_GITCOMMIT) \
 	-e ENGINE_GITCOMMIT=$(ENGINE_GITCOMMIT) \
-	-e COMPOSE_VERSION=$(DOCKER_COMPOSE_REF) \
-	-e SCAN_VERSION=$(DOCKER_SCAN_REF) \
-	-e SCAN_GITCOMMIT=$(SCAN_GITCOMMIT) \
 	-v $(CURDIR)/debbuild/$@:/build \
 	$(RUN_FLAGS) \
 	debbuild-$@/$(ARCH)
@@ -78,7 +71,7 @@ $(DISTROS): sources
 	$(CHOWN) -R $(shell id -u):$(shell id -g) "debbuild/$@"
 
 .PHONY: sources
-sources: sources/cli.tgz sources/engine.tgz sources/compose.tgz sources/scan-cli-plugin.tgz sources/docker.service sources/docker.socket sources/plugin-installers.tgz
+sources: sources/engine.tgz sources/docker.service sources/docker.socket sources/plugin-installers.tgz
 
 sources/engine.tgz:
 	mkdir -p $(@D)

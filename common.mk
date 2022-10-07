@@ -16,10 +16,10 @@ BUILDTIME=$(shell date -u -d "@$${SOURCE_DATE_EPOCH:-$$(date +%s)}" --rfc-3339 n
 CHOWN:=docker run --rm -v $(CURDIR):/v -w /v alpine chown
 DEFAULT_PRODUCT_LICENSE:=Community Engine
 DOCKER_GITCOMMIT:=abcdefg
-GO_VERSION:=1.18.7
+GO_VERSION:=1.17.0
 PLATFORM=Docker Engine - Community
 SHELL:=/bin/bash
-VERSION?=0.0.1-dev
+VERSION?=20.10.18~9
 
 # DOCKER_CLI_REPO and DOCKER_ENGINE_REPO define the source repositories to clone
 # the source from. These can be overridden to build from a fork.
@@ -35,10 +35,7 @@ DOCKER_COMPOSE_REPO ?= https://github.com/docker/compose.git
 #
 # For other situations, specify DOCKER_CLI_REF and/or DOCKER_ENGINE_REF separately.
 REF                ?= HEAD
-DOCKER_CLI_REF     ?= $(REF)
-DOCKER_ENGINE_REF  ?= $(REF)
-DOCKER_SCAN_REF    ?= v0.17.0
-DOCKER_COMPOSE_REF ?= v2.11.2
+DOCKER_ENGINE_REF  ?= cfdc075b1c08d0d1939a1a0847fd7b8e80ae2a6f
 
 export BUILDTIME
 export DEFAULT_PRODUCT_LICENSE
